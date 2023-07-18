@@ -1,12 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"log"
 
-	"github.com/gofiber/fiber/v2"
-	"github.com/vivekdubey/fiber-api/pkg/books"
-	"github.com/vivekdubey/fiber-api/pkg/common/config"
-	"github.com/vivekdubey/fiber-api/pkg/common/db"
+	"github.com/vivekdubey/fiber-api/internal/config"
 )
 
 func main() {
@@ -15,16 +13,16 @@ func main() {
 	if err != nil {
 		log.Fatalln("Failed at config", err)
 	}
+	fmt.Println(c.DBurl)
+	// app := fiber.New()
 
-	app := fiber.New()
-
-	db := db.Init(c.DBurl)
+	// db := db.Init(c.DBurl)
 
 	// app.Get("/", func(ctx *fiber.Ctx) error {
 	// 	return ctx.Status(fiber.StatusOK).SendString(c.Port)
 	// })
 
-	books.RegisterRoutes(app, db)
+	// books.RegisterRoutes(app, db)
 
-	app.Listen(c.Port)
+	// app.Listen(c.Port)
 }
