@@ -1,0 +1,2 @@
+ALTER TABLE transactions ALTER COLUMN user_id SET NOT NULL;
+ALTER TABLE transactions ALTER COLUMN book_id SET NOT NULL;
