@@ -8,9 +8,9 @@ ORDER BY title LIMIT $1 OFFSET $2;
 
 -- name: AddBook :one
 INSERT INTO books (
-  title, author, description
+  title, author, description, count
 ) VALUES (
-  $1, $2, $3
+  $1, $2, $3, $4
 )
 RETURNING *;
 
@@ -22,6 +22,13 @@ WHERE id = $1;
 UPDATE books
   set title = $2,
   description = $3,
-  author = $4
+  author = $4,
+  count = $5
+WHERE id = $1
+RETURNING *;
+
+-- name: UpdateBookCount :one
+UPDATE books
+  set count = $2
 WHERE id = $1
 RETURNING *;
