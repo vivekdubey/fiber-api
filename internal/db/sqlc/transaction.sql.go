@@ -7,7 +7,6 @@ package db
 
 import (
 	"context"
-	"database/sql"
 )
 
 const addTransaction = `-- name: AddTransaction :one
@@ -20,9 +19,9 @@ RETURNING id, user_id, book_id, created_at, count
 `
 
 type AddTransactionParams struct {
-	UserID sql.NullInt64 `json:"user_id"`
-	BookID sql.NullInt64 `json:"book_id"`
-	Count  sql.NullInt64 `json:"count"`
+	UserID int64 `json:"user_id"`
+	BookID int64 `json:"book_id"`
+	Count  int64 `json:"count"`
 }
 
 func (q *Queries) AddTransaction(ctx context.Context, arg AddTransactionParams) (Transaction, error) {

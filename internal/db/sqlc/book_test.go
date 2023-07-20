@@ -14,6 +14,7 @@ func addRandomBook(t *testing.T) Book {
 		Title:       util.RandomBookTitle(),
 		Author:      util.RandomBookAuthor(),
 		Description: util.RandomDescription(),
+		Count:       util.RandomInt(1, 30),
 	}
 
 	book, err := testQueries.AddBook(context.Background(), arg)
@@ -22,8 +23,10 @@ func addRandomBook(t *testing.T) Book {
 	require.Equal(t, arg.Author, book.Author)
 	require.Equal(t, arg.Title, book.Title)
 	require.Equal(t, arg.Description, book.Description)
+	require.Equal(t, arg.Count, book.Count)
 	require.NotZero(t, book.ID)
 	require.NotZero(t, book.CreatedAt)
+	require.NotZero(t, book.Count)
 
 	return book
 }
@@ -40,6 +43,7 @@ func TestGetBook(t *testing.T) {
 	require.Equal(t, book1.Title, book2.Title)
 	require.Equal(t, book1.Description, book2.Description)
 	require.Equal(t, book1.ID, book2.ID)
+	require.Equal(t, book1.Count, book2.Count)
 
 }
 
@@ -50,6 +54,7 @@ func TestUpdateBook(t *testing.T) {
 		Title:       util.RandomBookTitle(),
 		Description: util.RandomDescription(),
 		Author:      util.RandomBookAuthor(),
+		Count:       util.RandomInt(1, 60),
 	}
 
 	updatedBook, err := testQueries.UpdateBook(context.Background(), arg)
@@ -59,6 +64,7 @@ func TestUpdateBook(t *testing.T) {
 	require.Equal(t, arg.Title, updatedBook.Title)
 	require.Equal(t, arg.Title, updatedBook.Title)
 	require.Equal(t, book1.ID, updatedBook.ID)
+	require.Equal(t, arg.Count, updatedBook.Count)
 
 }
 
@@ -91,4 +97,18 @@ func TestGetBooks(t *testing.T) {
 	for _, book := range books {
 		require.NotEmpty(t, book)
 	}
+}
+
+func TestUpdateBookCount(t *testing.T) {
+	book1 := addRandomBook(t)
+	arg := UpdateBookCountParams{
+		Count: util.RandomInt(1, 70),
+		ID:    book1.ID,
+	}
+
+	book2, err := testQueries.UpdateBookCount(context.Background(), arg)
+
+	require.NoError(t, err)
+	require.NotEmpty(t, book2)
+	require.Equal(t, book2.Count, arg.Count)
 }

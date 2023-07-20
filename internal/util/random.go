@@ -37,3 +37,7 @@ func RandomBookAuthor() string {
 func RandomDescription() string {
 	return RandomString(20)
 }
+
+func RandomFirstName() string {
+	return RandomString(20)
+}

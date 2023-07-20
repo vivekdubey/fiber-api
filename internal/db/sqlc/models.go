@@ -5,7 +5,6 @@
 package db
 
 import (
-	"database/sql"
 	"time"
 )
 
@@ -19,12 +18,12 @@ type Book struct {
 }
 
 type Transaction struct {
-	ID        int64         `json:"id"`
-	UserID    sql.NullInt64 `json:"user_id"`
-	BookID    sql.NullInt64 `json:"book_id"`
-	CreatedAt time.Time     `json:"created_at"`
+	ID        int64     `json:"id"`
+	UserID    int64     `json:"user_id"`
+	BookID    int64     `json:"book_id"`
+	CreatedAt time.Time `json:"created_at"`
 	// negative for borrow and positive for return
-	Count sql.NullInt64 `json:"count"`
+	Count int64 `json:"count"`
 }
 
 type User struct {

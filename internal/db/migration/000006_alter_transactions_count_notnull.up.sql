@@ -1,0 +1,1 @@
+ALTER TABLE transactions ALTER COLUMN count SET NOT NULL;
