@@ -10,19 +10,20 @@ CREATE TABLE "books" (
 CREATE TABLE "users" (
   "id" bigserial PRIMARY KEY,
   "first_name" varchar NOT NULL,
-  "created_at" timestamptz NOT NULL DEFAULT (now())
+  "created_at" timestamptz NOT NULL DEFAULT (now()),
+  "last_activity" timestamptz NOT NULL DEFAULT (now())
 );
 
 CREATE TABLE "transactions" (
   "id" bigserial PRIMARY KEY,
-  "user_id" bigint,
-  "book_id" bigint,
+  "user_id" bigint NOT NULL,
+  "book_id" bigint NOT NULL,
   "created_at" timestamptz NOT NULL DEFAULT (now()),
-  "count" bigint
+  "count" bigint NOT NULL
 );
 
-COMMENT ON COLUMN "entries"."count" IS 'negative for borrow and positive for return';
+COMMENT ON COLUMN "transactions"."count" IS 'negative for borrow and positive for return';
 
-ALTER TABLE "entries" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
+ALTER TABLE "transactions" ADD FOREIGN KEY ("user_id") REFERENCES "users" ("id");
 
-ALTER TABLE "entries" ADD FOREIGN KEY ("book_id") REFERENCES "books" ("id");
+ALTER TABLE "transactions" ADD FOREIGN KEY ("book_id") REFERENCES "books" ("id");
