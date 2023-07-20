@@ -1,0 +1,5 @@
+BEGIN;
+
+ALTER TABLE books ADD COLUMN count bigint NOT NULL DEFAULT 1;
+
+COMMIT;

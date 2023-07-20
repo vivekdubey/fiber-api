@@ -1,0 +1,5 @@
+BEGIN;
+
+ALTER TABLE books DROP COLUMN count;
+
+COMMIT;
