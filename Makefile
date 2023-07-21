@@ -10,4 +10,7 @@ migratedown:
 test:
 	go test -v -cover ./...
 
+sqlc:
+	sqlc generate
+
 .PHONY: server migrateup migratedown test
