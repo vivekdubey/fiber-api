@@ -27,7 +27,8 @@ type Transaction struct {
 }
 
 type User struct {
-	ID        int64     `json:"id"`
-	FirstName string    `json:"first_name"`
-	CreatedAt time.Time `json:"created_at"`
+	ID           int64     `json:"id"`
+	FirstName    string    `json:"first_name"`
+	CreatedAt    time.Time `json:"created_at"`
+	LastActivity time.Time `json:"last_activity"`
 }

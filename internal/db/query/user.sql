@@ -13,3 +13,9 @@ RETURNING *;
 -- name: DeleteUser :exec
 DELETE FROM users
 WHERE id = $1;
+
+-- name: UpdateLastActivity :one
+UPDATE users
+  set last_activity = $2
+WHERE id = $1
+RETURNING *;

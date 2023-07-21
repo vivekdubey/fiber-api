@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/require"
 	"github.com/vivekdubey/fiber-api/internal/util"
@@ -40,4 +41,19 @@ func TestDeleteUser(t *testing.T) {
 	require.Error(t, err)
 	require.EqualError(t, err, sql.ErrNoRows.Error())
 	require.Empty(t, user2)
+}
+
+func TestUpdateLastActivity(t *testing.T) {
+	user1 := addRandomuser(t)
+	loc, _ := time.LoadLocation("Australia/Sydney")
+	arg := UpdateLastActivityParams{
+		ID:           user1.ID,
+		LastActivity: time.Now().In(loc),
+	}
+
+	user2, err := testQueries.UpdateLastActivity(context.Background(), arg)
+	td := user2.LastActivity.Sub(arg.LastActivity).Milliseconds()
+	require.NoError(t, err)
+	require.NotEmpty(t, user2)
+	require.LessOrEqual(t, td, int64(100))
 }

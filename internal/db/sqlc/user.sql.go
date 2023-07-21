@@ -7,6 +7,7 @@ package db
 
 import (
 	"context"
+	"time"
 )
 
 const addUser = `-- name: AddUser :one
@@ -15,13 +16,18 @@ INSERT INTO users (
 ) VALUES (
   $1
 )
-RETURNING id, first_name, created_at
+RETURNING id, first_name, created_at, last_activity
 `
 
 func (q *Queries) AddUser(ctx context.Context, firstName string) (User, error) {
 	row := q.db.QueryRowContext(ctx, addUser, firstName)
 	var i User
-	err := row.Scan(&i.ID, &i.FirstName, &i.CreatedAt)
+	err := row.Scan(
+		&i.ID,
+		&i.FirstName,
+		&i.CreatedAt,
+		&i.LastActivity,
+	)
 	return i, err
 }
 
@@ -36,13 +42,42 @@ func (q *Queries) DeleteUser(ctx context.Context, id int64) error {
 }
 
 const getUser = `-- name: GetUser :one
-SELECT id, first_name, created_at FROM users
+SELECT id, first_name, created_at, last_activity FROM users
 WHERE id = $1 LIMIT 1
 `
 
 func (q *Queries) GetUser(ctx context.Context, id int64) (User, error) {
 	row := q.db.QueryRowContext(ctx, getUser, id)
 	var i User
-	err := row.Scan(&i.ID, &i.FirstName, &i.CreatedAt)
+	err := row.Scan(
+		&i.ID,
+		&i.FirstName,
+		&i.CreatedAt,
+		&i.LastActivity,
+	)
+	return i, err
+}
+
+const updateLastActivity = `-- name: UpdateLastActivity :one
+UPDATE users
+  set last_activity = $2
+WHERE id = $1
+RETURNING id, first_name, created_at, last_activity
+`
+
+type UpdateLastActivityParams struct {
+	ID           int64     `json:"id"`
+	LastActivity time.Time `json:"last_activity"`
+}
+
+func (q *Queries) UpdateLastActivity(ctx context.Context, arg UpdateLastActivityParams) (User, error) {
+	row := q.db.QueryRowContext(ctx, updateLastActivity, arg.ID, arg.LastActivity)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.FirstName,
+		&i.CreatedAt,
+		&i.LastActivity,
+	)
 	return i, err
 }
