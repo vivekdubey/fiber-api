@@ -5,3 +5,7 @@ INSERT INTO transactions (
   $1, $2, $3
 )
 RETURNING *;
+
+-- name: GetTransaction :one
+SELECT * FROM transactions
+WHERE id = $1 LIMIT 1;

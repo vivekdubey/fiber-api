@@ -14,17 +14,19 @@ var testQueries *Queries
 
 const dbDriver = "postgres"
 
+var testDB *sql.DB
+
 func TestMain(m *testing.M) {
 	c, err := config.LoadConfig()
 
 	if err != nil {
 		log.Fatalln("Failed at config", err)
 	}
-	conn, err := sql.Open(dbDriver, c.DBurl)
+	testDB, err = sql.Open(dbDriver, c.DBurl)
 	if err != nil {
 		log.Fatal("Can't connect to db")
 	}
 
-	testQueries = New(conn)
+	testQueries = New(testDB)
 	os.Exit(m.Run())
 }

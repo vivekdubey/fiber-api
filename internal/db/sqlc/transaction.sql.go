@@ -36,3 +36,21 @@ func (q *Queries) AddTransaction(ctx context.Context, arg AddTransactionParams) 
 	)
 	return i, err
 }
+
+const getTransaction = `-- name: GetTransaction :one
+SELECT id, user_id, book_id, created_at, count FROM transactions
+WHERE id = $1 LIMIT 1
+`
+
+func (q *Queries) GetTransaction(ctx context.Context, id int64) (Transaction, error) {
+	row := q.db.QueryRowContext(ctx, getTransaction, id)
+	var i Transaction
+	err := row.Scan(
+		&i.ID,
+		&i.UserID,
+		&i.BookID,
+		&i.CreatedAt,
+		&i.Count,
+	)
+	return i, err
+}
